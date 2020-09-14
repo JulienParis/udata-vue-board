@@ -126,6 +126,37 @@ export default {
       log: (state) => state.global.log,
       tokens: (state) => state.oauth.tokens
     })
+  },
+  methods: {
+    async makeToast (loginModerationResponse) {
+      console.log('-V- Login > makeToast > loginModerationResponse : ', loginModerationResponse)
+      const h = this.$createElement
+      const variant = loginModerationResponse.status && loginModerationResponse.status === 200 ? 'success' : 'danger'
+      const title = loginModerationResponse.status && loginModerationResponse.status === 200 ? 'success' : 'error'
+      const msg = loginModerationResponse.status && loginModerationResponse.status === 200 ? 'ok msg' : this.$t('toastsModeration.errorTxt', { code: loginModerationResponse.status })
+
+      const vNodesTitle = h(
+        'div',
+        { class: ['d-flex', 'flex-grow-1', 'align-items-baseline', 'ml-2'] },
+        [
+          h('strong', { class: ['mr-2', 'text-center'] }, this.$t(`toastsModeration.${title}`))
+        ]
+      )
+      const vNodesMsg = h(
+        'p',
+        { class: ['text-center', 'my-2'] },
+        [
+          h('strong', msg)
+        ]
+      )
+      console.log('-V- Login > makeToast > vNodesTitle : ', vNodesTitle)
+
+      this.$bvToast.toast([vNodesMsg], {
+        title: [vNodesTitle],
+        variant: variant,
+        solid: true
+      })
+    }
   }
   // methods: {
   //   async makeToast (loginModerationResponse) {
